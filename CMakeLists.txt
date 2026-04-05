@@ -9,3 +9,4 @@ include_directories(include)
 add_executable(robot
     src/main.cpp
 )
+target_link_libraries(robot gpiod)
