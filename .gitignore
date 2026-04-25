@@ -1,6 +1,4 @@
 build/
 *.o
 *.out
-*.log
-.DS_Store
-.vscode/
+*.exe
