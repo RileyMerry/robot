@@ -11,6 +11,7 @@ add_executable(robot
     src/main.cpp
     src/MotorDriver.cpp
     src/Robot.cpp
+    src/WebServer.cpp
 )
 
 target_link_libraries(robot gpiod)

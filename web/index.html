@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robot Controller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #111;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .controller {
+            display: grid;
+            grid-template-columns: 100px 100px 100px;
+            grid-template-rows: 100px 100px 100px;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button {
+            width: 100px;
+            height: 100px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 16px;
+            border: none;
+            background: #2f80ed;
+            color: white;
+        }
+
+        button:active {
+            background: #56ccf2;
+        }
+
+        .stop {
+            background: #eb5757;
+        }
+
+        .empty {
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Robot Controller</h1>
+
+    <div class="controller">
+        <div class="empty"></div>
+        <button ontouchstart="sendCommand('forward')" onmousedown="sendCommand('forward')" ontouchend="sendCommand('stop')" onmouseup="sendCommand('stop')">W</button>
+        <div class="empty"></div>
+
+        <button ontouchstart="sendCommand('left')" onmousedown="sendCommand('left')" ontouchend="sendCommand('stop')" onmouseup="sendCommand('stop')">A</button>
+        <button class="stop" onclick="sendCommand('stop')">STOP</button>
+        <button ontouchstart="sendCommand('right')" onmousedown="sendCommand('right')" ontouchend="sendCommand('stop')" onmouseup="sendCommand('stop')">D</button>
+
+        <div class="empty"></div>
+        <button ontouchstart="sendCommand('backward')" onmousedown="sendCommand('backward')" ontouchend="sendCommand('stop')" onmouseup="sendCommand('stop')">S</button>
+        <div class="empty"></div>
+    </div>
+
+    <script>
+        function sendCommand(command) {
+            fetch('/' + command)
+                .then(response => console.log(command))
+                .catch(error => console.error(error));
+        }
+    </script>
+</body>
+</html>
