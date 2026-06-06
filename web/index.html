@@ -15,7 +15,47 @@
         }
 
         h1 {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        .video-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
             margin-bottom: 30px;
+        }
+
+        .camera-feed,
+        .slam-map {
+            max-width: 95%;
+            border: 3px solid #2f80ed;
+            border-radius: 14px;
+            background: #000;
+        }
+
+        .camera-feed {
+            width: 360px;
+        }
+
+        .slam-map {
+            width: 360px;
+        }
+
+        .slam-data {
+            background: #1c1c1c;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 12px;
+            width: 320px;
+            margin: 0 auto 30px auto;
+            font-size: 18px;
+            text-align: left;
         }
 
         .controller {
@@ -54,8 +94,26 @@
 
 <body>
     <h1>Robot Controller</h1>
-<h2>Camera Feed</h2>
-<img src="http://192.168.1.142:8081/stream" width="320">
+
+    <div class="video-panel">
+        <div>
+            <h2>Camera Feed</h2>
+            <img class="camera-feed" src="http://192.168.1.142:8081/stream">
+        </div>
+
+        <div>
+            <h2>SLAM Trajectory</h2>
+            <img class="slam-map" src="http://192.168.1.142:8081/slam_map">
+        </div>
+    </div>
+
+    <h2>SLAM Data</h2>
+    <div class="slam-data">
+        <div>X: <span id="slamX">Loading...</span></div>
+        <div>Z: <span id="slamZ">Loading...</span></div>
+        <div>Features: <span id="slamFeatures">Loading...</span></div>
+        <div>Matches: <span id="slamMatches">Loading...</span></div>
+    </div>
 
     <div class="controller">
         <div class="empty"></div>
@@ -77,6 +135,21 @@
                 .then(response => console.log(command))
                 .catch(error => console.error(error));
         }
+
+        function updateSlamData() {
+            fetch('http://192.168.1.142:8081/slam_data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('slamX').textContent = data.x;
+                    document.getElementById('slamZ').textContent = data.z;
+                    document.getElementById('slamFeatures').textContent = data.features;
+                    document.getElementById('slamMatches').textContent = data.matches;
+                })
+                .catch(error => console.error('SLAM data error:', error));
+        }
+
+        setInterval(updateSlamData, 1000);
+        updateSlamData();
     </script>
 </body>
 </html>
