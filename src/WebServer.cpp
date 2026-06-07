@@ -25,7 +25,7 @@ std::string WebServer::buildHttpResponse(const std::string& body, const std::str
 }
 
 std::string WebServer::loadIndexPage() {
-std::ifstream file("/home/rmerry/robot/web/index.html");
+std::ifstream file("/home/rmerry/robot_ws/projects/ugv_v2/web/index.html");
     if (!file) {
         return "<html><body><h1>Robot Controller</h1><p>index.html not found</p></body></html>";
     }
