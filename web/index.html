@@ -1,155 +1,297 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-    <title>Robot Controller</title>
+
+    <title>UGV V2 Robot Controller</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+
         body {
+
             font-family: Arial, sans-serif;
+
             text-align: center;
+
             background: #111;
+
             color: white;
+
             margin: 0;
+
             padding: 20px;
+
         }
 
-        h1 {
+        h1 { margin-bottom: 10px; }
+
+        h2 { margin-top: 22px; margin-bottom: 10px; }
+
+        .status {
+
+            color: #aaa;
+
             margin-bottom: 20px;
+
+            font-size: 14px;
+
         }
 
-        h2 {
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
+        .dashboard {
 
-        .video-panel {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 30px;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 22px;
+
+            margin-bottom: 25px;
+
+        }
+
+        .panel {
+
+            background: #1c1c1c;
+
+            border: 2px solid #333;
+
+            border-radius: 14px;
+
+            padding: 12px;
+
         }
 
         .camera-feed,
+
         .slam-map {
-            max-width: 95%;
+
+            max-width: 95vw;
+
             border: 3px solid #2f80ed;
-            border-radius: 14px;
+
+            border-radius: 12px;
+
             background: #000;
+
         }
 
         .camera-feed {
+
             width: 360px;
+
+            height: 270px;
+
+            object-fit: contain;
+
         }
 
         .slam-map {
+
             width: 360px;
+
+            height: 360px;
+
+            object-fit: contain;
+
         }
 
         .slam-data {
+
             background: #1c1c1c;
+
             border: 2px solid #333;
+
             border-radius: 12px;
+
             padding: 12px;
+
             width: 320px;
-            margin: 0 auto 30px auto;
+
+            margin: 0 auto 25px auto;
+
             font-size: 18px;
+
             text-align: left;
+
         }
 
         .controller {
+
             display: grid;
+
             grid-template-columns: 100px 100px 100px;
+
             grid-template-rows: 100px 100px 100px;
+
             gap: 12px;
+
             justify-content: center;
+
             align-items: center;
+
+            margin-top: 20px;
+
         }
 
         button {
+
             width: 100px;
+
             height: 100px;
+
             font-size: 20px;
+
             font-weight: bold;
+
             border-radius: 16px;
+
             border: none;
+
             background: #2f80ed;
+
             color: white;
+
+            touch-action: manipulation;
+
         }
 
         button:active {
+
             background: #56ccf2;
+
         }
 
         .stop {
+
             background: #eb5757;
+
         }
 
         .empty {
+
             visibility: hidden;
+
         }
+
     </style>
+
 </head>
 
 <body>
-    <h1>Robot Controller</h1>
 
-    <div class="video-panel">
-        <div>
+    <h1>UGV V2 Robot Controller</h1>
+
+    <div class="status">
+
+        Controller: port 8080 | Camera/SLAM: port 8081
+
+    </div>
+
+    <div class="dashboard">
+
+        <div class="panel">
+
             <h2>Camera Feed</h2>
-            <img class="camera-feed" src="http://192.168.1.142:8081/stream">
+
+            <img class="camera-feed" src="http://192.168.1.145:8081/stream" alt="Camera Feed">
+
         </div>
 
-        <div>
-            <h2>SLAM Trajectory</h2>
-            <img class="slam-map" src="http://192.168.1.142:8081/slam_map">
+        <div class="panel">
+
+            <h2>Visual Odometry Map</h2>
+
+            <img class="slam-map" src="http://192.168.1.145:8081/slam_map" alt="SLAM Map">
+
         </div>
+
     </div>
 
     <h2>SLAM Data</h2>
+
     <div class="slam-data">
+
         <div>X: <span id="slamX">Loading...</span></div>
+
         <div>Z: <span id="slamZ">Loading...</span></div>
+
         <div>Features: <span id="slamFeatures">Loading...</span></div>
+
         <div>Matches: <span id="slamMatches">Loading...</span></div>
+
     </div>
 
+    <h2>Drive Controls</h2>
+
     <div class="controller">
-        <div class="empty"></div>
-        <button ontouchstart="sendCommand('forward')" onmousedown="sendCommand('forward')" ontouchend="sendCommand('stop')" onmouseup="sendCommand('stop')">W</button>
+
         <div class="empty"></div>
 
-        <button ontouchstart="sendCommand('left')" onmousedown="sendCommand('left')" ontouchend="sendCommand('stop')" onmouseup="sendCommand('stop')">A</button>
+        <button onpointerdown="sendCommand('forward')" onpointerup="sendCommand('stop')" onpointerleave="sendCommand('stop')">W</button>
+
+        <div class="empty"></div>
+
+        <button onpointerdown="sendCommand('left')" onpointerup="sendCommand('stop')" onpointerleave="sendCommand('stop')">A</button>
+
         <button class="stop" onclick="sendCommand('stop')">STOP</button>
-        <button ontouchstart="sendCommand('right')" onmousedown="sendCommand('right')" ontouchend="sendCommand('stop')" onmouseup="sendCommand('stop')">D</button>
+
+        <button onpointerdown="sendCommand('right')" onpointerup="sendCommand('stop')" onpointerleave="sendCommand('stop')">D</button>
 
         <div class="empty"></div>
-        <button ontouchstart="sendCommand('backward')" onmousedown="sendCommand('backward')" ontouchend="sendCommand('stop')" onmouseup="sendCommand('stop')">S</button>
+
+        <button onpointerdown="sendCommand('backward')" onpointerup="sendCommand('stop')" onpointerleave="sendCommand('stop')">S</button>
+
         <div class="empty"></div>
+
     </div>
 
     <script>
+
+        const CAMERA_SERVER = "http://192.168.1.145:8081";
+
         function sendCommand(command) {
+
             fetch('/' + command)
-                .then(response => console.log(command))
-                .catch(error => console.error(error));
+
+                .then(response => console.log("Command:", command))
+
+                .catch(error => console.error("Command error:", error));
+
         }
 
         function updateSlamData() {
-            fetch('http://192.168.1.142:8081/slam_data')
+
+            fetch(CAMERA_SERVER + '/slam_data')
+
                 .then(response => response.json())
+
                 .then(data => {
+
                     document.getElementById('slamX').textContent = data.x;
+
                     document.getElementById('slamZ').textContent = data.z;
+
                     document.getElementById('slamFeatures').textContent = data.features;
+
                     document.getElementById('slamMatches').textContent = data.matches;
+
                 })
+
                 .catch(error => console.error('SLAM data error:', error));
+
         }
 
         setInterval(updateSlamData, 1000);
+
         updateSlamData();
+
     </script>
+
 </body>
+
 </html>
